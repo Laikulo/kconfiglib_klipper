@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+set -xe
+
+
+main() {
+	scripts_dir="$(dirname $0)"
+	source "$scripts_dir/functions.bash"
+	repo_top="$scripts_dir/.."
+	need_command git
+
+	upstream_repo="https://github.com/klipper3d/klipper.git"
+	upstream_ref="master"
+
+	upstream_dir="$repo_top/work/klipper_git"
+	if [[ ! -d $upstream_dir ]]; then
+		mkdir "$upstream_dir"
+	fi
+
+	cd "$upstream_dir"
+
+	if [[ ! -d .git ]]; then
+		git init -b kconfiglib
+	fi
+
+	# Fully fetch the most recent commit
+	# Get history (trees and commits) for all time
+	git fetch --filter blob:none "$upstream_repo" "$upstream_ref:kconfiglib_src"
+	# Clean out any blobs from prior fetches
+	git sparse-checkout set --no-cone lib/kconfiglib/\*
+	git reset --hard kconfiglib_src
+
+}
+
+main "$@"
+exit $?
