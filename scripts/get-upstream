@@ -9,7 +9,7 @@ main() {
 	need_command git
 
 	upstream_repo="https://github.com/klipper3d/klipper.git"
-	upstream_ref="master"
+	upstream_ref="${1:-master}"
 
 	upstream_dir="$repo_top/work/klipper_git"
 	if [[ ! -d $upstream_dir ]]; then

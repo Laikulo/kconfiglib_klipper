@@ -17,7 +17,7 @@ $(PY_FILES) &: $(PY_FILES_SRC) src/kconfiglib
 	cp -v $(PY_FILES_SRC) src/kconfiglib
 
 $(PY_FILES_SRC) work/kconfiglib/kconfiglib.py work/kconfiglib/LICENSE.txt:
-	scripts/get-upstream
+	scripts/get-upstream $(file < upstream_ref.txt)
 
 src/kconfiglib/__init__.py: work/kconfiglib/kconfiglib.py
 	cp -v "$<" "$@"

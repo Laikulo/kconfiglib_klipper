@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+upstream_uri="https://github.com/klipper3d/klipper.git"
+check_repo="$(dirname "$0")/../work/check-update.repo.git"
+
+target_file="lib/kconfiglib/kconfiglib.py"
+
+if [[ -e $check_repo ]]; then
+	GIT_DIR="$check_repo" git fetch "$upstream_uri" --filter blob:none
+else
+	git clone --bare --filter blob:none "$upstream_uri" "$check_repo"
+fi
+
+latest_ref="$(GIT_DIR="$check_repo" git show-ref master | cut -f1 -d" ")"
+latest_blob="$(GIT_DIR="$check_repo" git ls-tree master "$target_file" --object-only)"
+
+printf "Upstream has blob ${latest_blob} at ${latest_ref}\n"
+
+tool_ref="$(cat "$check_repo/../../upstream_ref.txt")"
+tool_blob="$(GIT_DIR="$check_repo" git ls-tree "$tool_ref" "$target_file" --object-only)"
+
+printf "Tooling has blob ${tool_blob} at ${tool_ref}\n"
+
+
+if [[ $tool_blob != "$latest_blob" ]]; then
+	echo "New commits affecting target"
+	GIT_DIR="$check_repo" git log "$tool_ref..$latest_ref" -- "$target_file"
+	exit 1
+else
+	echo "Ref is current"
+	exit 0
+fi
+
