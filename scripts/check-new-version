@@ -3,7 +3,7 @@
 upstream_uri="https://github.com/klipper3d/klipper.git"
 check_repo="$(dirname "$0")/../work/check-update.repo.git"
 
-target_file="lib/kconfiglib/kconfiglib.py"
+target_file="lib/kconfiglib"
 
 if [[ -e $check_repo ]]; then
 	GIT_DIR="$check_repo" git fetch "$upstream_uri" --filter blob:none
