@@ -1,5 +1,5 @@
 
-PY_NAMES := genconfig.py menuconfig.py olddefconfig.py
+PY_NAMES := genconfig.py menuconfig.py olddefconfig.py savedefconfig.py
 PY_FILES_SRC := $(foreach f,$(PY_NAMES),work/kconfiglib/$(f))
 PY_FILES := $(foreach f,$(PY_NAMES),src/kconfiglib/$(f)) 
 
